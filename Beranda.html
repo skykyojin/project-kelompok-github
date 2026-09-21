@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages. - Beranda</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style_Beranda.css">
+</head>
+<body>
+
+  <!-- NAVBAR UTAMA (SAMPING) -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="brand">
+        <i class="fa-solid fa-book-open"></i> pages.
+      </div>
+      <ul class="nav-menu">
+        <li><a href="Beranda.html" class="nav-item active"><i class="fa-solid fa-house"></i> Beranda</a></li>
+        <li><a href="library.html" class="nav-item"><i class="fa-solid fa-book-bookmark"></i> Rak Saya</a></li>
+        <li><a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i> Profil</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      "Setiap buku adalah perjalanan ke dunia lain. ♡"
+    </div>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-wrapper">
+    <!-- NAVBAR KHUSUS BERANDA (ATAS) -->
+    <header class="top-navbar">
+      <div style="display: flex; align-items: center;">
+        <button class="toggle-sidebar-btn" id="sidebarToggle" title="Buka/Tutup Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <!-- ANCHOR LINK MENU ATAS -->
+        <ul class="top-subnav">
+          <li><a href="#terbaru" class="subnav-link active">Terbaru</a></li>
+          <li><a href="#populer" class="subnav-link">Populer</a></li>
+        </ul>
+      </div>
+
+      <div class="top-actions">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Cari judul, penulis, atau genre...">
+        </div>
+        <a href="profile.html">
+          <img src="Gambar/images.jpe" alt="Avatar" class="user-avatar">
+        </a>
+      </div>
+    </header>
+
+    <main class="content-container">
+      
+      <!-- HERO BANNER -->
+      <div class="hero-banner">
+        <h1>Buku bagus, selalu punya cara untuk menemani.</h1>
+        <p>Temukan cerita yang sesuai dengan suasana hatimu hari ini.</p>
+        <button class="btn-explore">Jelajahi Sekarang &rarr;</button>
+      </div>
+
+      <!-- SECTION TERBARU / UNTUK KAMU -->
+      <section id="terbaru" class="section-block">
+        <div class="section-title">
+          <h2>Untuk Kamu (Terbaru)</h2>
+          <a href="#">Lihat Semua &rarr;</a>
+        </div>
+
+        <div class="books-grid">
+          <div class="book-card" onclick="window.location.href='detail_LYS.html'">
+            <i class="fa-regular fa-heart like-btn"></i>
+            <img src="Gambar/cover_langit yang sama.jpg" alt="Sampul Buku" class="book-cover">
+            <div class="book-title">Langit yang Sama</div>
+            <div class="book-author">Arkana Putra</div>
+            <span class="genre-tag">Romance</span>
+          </div>
+          <div class="book-card" onclick="window.location.href='detail_DAK.html'">
+            <i class="fa-regular fa-heart like-btn"></i>
+            <img src="Gambar/cover_di Antara kita.jpe" alt="Sampul Buku" class="book-cover">
+            <div class="book-title">Di Antara Kita</div>
+            <div class="book-author">Nara Satria</div>
+            <span class="genre-tag">Drama</span>
+          </div>
+          <div class="book-card" onclick="window.location.href='detail_SLP.html'">
+            <i class="fa-regular fa-heart like-btn"></i>
+            <img src="Gambar/cover_sebelum langit patah.jpe" alt="Sampul Buku" class="book-cover">
+            <div class="book-title">Sebelum Langit Patah</div>
+            <div class="book-author">Laras A.</div>
+            <span class="genre-tag">Romance</span>
+          </div>
+          <div class="book-card" onclick="window.location.href='detail_K305.html'">
+            <i class="fa-regular fa-heart like-btn"></i>
+            <img src="Gambar/cover_kamar 305.jpg" alt="Sampul Buku" class="book-cover">
+            <div class="book-title">Kamar 305</div>
+            <div class="book-author">Raka Damar</div>
+            <span class="genre-tag">Mystery</span>
+          </div>
+          <div class="book-card" onclick="window.location.href='detail_PULANG.html'">
+            <i class="fa-regular fa-heart like-btn"></i>
+            <img src="Gambar/cover_pulang.jpeg" alt="Sampul Buku" class="book-cover">
+            <div class="book-title">Pulang</div>
+            <div class="book-author">Tara Adhitya</div>
+            <span class="genre-tag">Slice of Life</span>
+          </div>
+        </div>
+      </section>
+
+      
+
+      <!-- SECTION BUKU POPULER (DIPINDAH MASUK KEMARI) -->
+      <section id="populer" class="section-block populer-section">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-fire" style="color: #e74c3c;"></i> Populer Minggu Ini</h2>
+          <span class="section-subtitle">Buku yang paling banyak dibaca</span>
+        </div>
+
+        <div class="popular-grid">
+          <a href="detail_LYS.html" class="popular-card">
+            <div class="badge-rank">#1</div>
+            <img src="Gambar/cover_langit yang sama.jpg" alt="Cover Buku">
+            <div class="popular-info">
+              <h3>Langit yang Sama</h3>
+              <p>Arkana Putra</p>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.9</div>
+            </div>
+          </a>
+
+          <a href="detail_PULANG.html" class="popular-card">
+            <div class="badge-rank">#2</div>
+            <img src="Gambar/cover_pulang.jpeg" alt="Cover Buku">
+            <div class="popular-info">
+              <h3>Pulang</h3>
+              <p>Tere Liye</p>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.8</div>
+            </div>
+          </a>
+
+          <a href="detail_K305.html" class="popular-card">
+            <div class="badge-rank">#3</div>
+            <img src="Gambar/cover_kamar 305.jpg" alt="Cover Buku">
+            <div class="popular-info">
+              <h3>Kamar 305</h3>
+              <p>Raka Damar</p>
+              <div class="rating"><i class="fa-solid fa-star"></i> 4.7</div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- JAVASCRIPT LOKAL -->
+  <script src="js/script_Beranda.js"></script>
+
+</body>
+</html>
