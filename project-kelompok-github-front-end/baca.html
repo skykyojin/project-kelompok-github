@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membaca - Pages</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style_baca.css">
+</head>
+<body>
+
+  <div class="read-wrapper">
+    <!-- HEADER NAVIGASI -->
+    <header class="reader-header">
+      <a href="javascript:history.back()" class="back-link">
+        <i class="fa-solid fa-chevron-left"></i> Kembali
+      </a>
+      <div class="header-tools">
+        <button class="tool-btn" title="Pengaturan Teks">Aa</button>
+        <button class="tool-btn" title="Mode Gelap"><i class="fa-regular fa-moon"></i></button>
+      </div>
+    </header>
+
+    <!-- METADATA & PROGRESS BUKU -->
+    <section class="book-meta-section">
+      <h1 class="book-title" id="readBookTitle">Memuat...</h1>
+      <p class="book-author" id="readBookAuthor">-</p>
+      
+      <div class="progress-info">
+        <span id="chapterTitleDisplay">Memuat Bab...</span>
+      </div>
+    </section>
+
+    <!-- AREA KONTEN BACAAN -->
+    <main class="reader-container">
+      <article class="reader-content" id="readerContent">
+        <p><i class="fa-solid fa-spinner fa-spin"></i> Memuat isi cerita dari Supabase...</p>
+      </article>
+    </main>
+
+    <!-- FOOTER NAVIGASI BAB -->
+    <footer class="reader-footer">
+      <a href="#" id="prevChapterBtn" class="nav-chapter-btn"><i class="fa-solid fa-arrow-left"></i> Bab Sebelumnya</a>
+      <a href="#" id="nextChapterBtn" class="nav-chapter-btn">Bab Berikutnya <i class="fa-solid fa-arrow-right"></i></a>
+    </footer>
+  </div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/script_baca.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const chapterId = urlParams.get('chapter_id') || 1;
+
+      // Ambil detail bab dari Supabase
+      const chapter = await fetchChapterById(chapterId);
+      if (chapter) {
+        document.getElementById('chapterTitleDisplay').innerText = chapter.title;
+        
+        // Ambil detail buku pemilik bab ini
+        const book = await fetchBookByIdFromSupabase(chapter.book_id);
+        if (book) {
+          document.getElementById('readBookTitle').innerText = book.title;
+          document.getElementById('readBookAuthor').innerText = book.author;
+          document.title = `Membaca ${book.title} - ${chapter.title}`;
+        }
+
+        // Format paragraf teks cerita
+        const paragraphs = chapter.content.split('\n').filter(p => p.trim() !== '');
+        const contentHtml = paragraphs.map(p => `<p>${p}</p>`).join('');
+        document.getElementById('readerContent').innerHTML = contentHtml;
+
+        // Ambil semua bab untuk navigasi Bab Sebelum / Sesudah
+        const allChapters = await fetchChaptersByBookId(chapter.book_id);
+        const currentIndex = allChapters.findIndex(c => c.id == chapter.id);
+
+        const prevBtn = document.getElementById('prevChapterBtn');
+        const nextBtn = document.getElementById('nextChapterBtn');
+
+        if (currentIndex > 0) {
+          prevBtn.href = `baca.html?chapter_id=${allChapters[currentIndex - 1].id}`;
+          prevBtn.style.opacity = '1';
+          prevBtn.style.pointerEvents = 'auto';
+        } else {
+          prevBtn.style.opacity = '0.4';
+          prevBtn.style.pointerEvents = 'none';
+        }
+
+        if (currentIndex < allChapters.length - 1) {
+          nextBtn.href = `baca.html?chapter_id=${allChapters[currentIndex + 1].id}`;
+          nextBtn.style.opacity = '1';
+          nextBtn.style.pointerEvents = 'auto';
+        } else {
+          nextBtn.style.opacity = '0.4';
+          nextBtn.style.pointerEvents = 'none';
+        }
+      } else {
+        document.getElementById('readerContent').innerHTML = '<p>Bab tidak ditemukan.</p>';
+      }
+    });
+  </script>
+</body>
+</html>

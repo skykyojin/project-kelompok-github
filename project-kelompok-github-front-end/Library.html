@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages. - Perpustakaan</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style_library.css">
+  <style>
+    .book-item {
+      cursor: pointer;
+      position: relative;
+    }
+    .options-dropdown {
+      position: absolute;
+      right: 40px;
+      top: 40px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      min-width: 170px;
+      overflow: hidden;
+    }
+    .options-dropdown.active {
+      display: flex;
+    }
+    .dropdown-btn {
+      padding: 10px 14px;
+      border: none;
+      background: none;
+      text-align: left;
+      font-size: 13px;
+      font-family: 'Poppins', sans-serif;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dropdown-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR UTAMA (SAMPING) -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="brand">
+        <i class="fa-solid fa-book-open"></i> pages.
+      </div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i> Beranda</a></li>
+        <li><a href="Library.html" class="nav-item active"><i class="fa-solid fa-book-bookmark"></i> Perpustakaan</a></li>
+        <li><a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i> Profil</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      "Setiap buku adalah perjalanan ke dunia lain. ♡"
+    </div>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-wrapper">
+    <!-- HEADER BAR ATAS -->
+    <header class="top-navbar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button class="toggle-sidebar-btn" id="sidebarToggle" title="Buka/Tutup Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <h1 class="page-title">Perpustakaan</h1>
+      </div>
+    </header>
+
+    <main class="content-container">
+      <!-- SUB-NAVBAR / TAB MENU -->
+      <ul class="library-tabs">
+        <li><a href="#" class="tab-link active" data-tab="buku-saya">Buku Saya</a></li>
+        <li><a href="#" class="tab-link" data-tab="favorit">Favorit</a></li>
+        <li><a href="#" class="tab-link" data-tab="riwayat">Riwayat</a></li>
+      </ul>
+
+      <!-- SEARCH BAR & DROPDOWN FILTER -->
+      <div class="filter-row">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="libSearchInput" placeholder="Cari di perpustakaan...">
+        </div>
+        <select class="dropdown-filter" id="statusFilter">
+          <option value="semua">Semua</option>
+          <option value="sedang">Sedang Dibaca</option>
+          <option value="selesai">Selesai</option>
+        </select>
+      </div>
+
+      <!-- DAFTAR BUKU (LIST VIEW) -->
+      <div class="library-list" id="libraryListContainer">
+        <div style="text-align: center; padding: 40px; color: #64748b;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 8px;"></i><br>
+          Memuat koleksi perpustakaan dari Supabase...
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/script_beranda.js"></script>
+  <script>
+    let libraryBooks = [];
+    let activeTab = 'buku-saya';
+    let favoritesList = JSON.parse(localStorage.getItem('user_favorites') || '[1, 2]');
+    let completedList = JSON.parse(localStorage.getItem('user_completed') || '[3]');
+    let historyList = JSON.parse(localStorage.getItem('user_history') || '[1, 2, 4]');
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Setup Tab Links
+      document.querySelectorAll('.library-tabs .tab-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.querySelectorAll('.library-tabs .tab-link').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          activeTab = link.getAttribute('data-tab');
+          renderLibrary();
+        });
+      });
+
+      // Filter events
+      document.getElementById('statusFilter').addEventListener('change', renderLibrary);
+      document.getElementById('libSearchInput').addEventListener('input', renderLibrary);
+
+      // Fetch Books from Supabase
+      const books = await fetchBooksFromSupabase();
+      if (books && books.length > 0) {
+        libraryBooks = books;
+      } else {
+        libraryBooks = [
+          { id: 1, title: 'Langit yang Sama', author: 'Arkana Putra', cover_image: 'cover_langit yang sama.jpg', total_bab: 28, read_bab: 12 },
+          { id: 2, title: 'Di Antara Kita', author: 'Nara Satria', cover_image: 'cover_di Antara kita.jpe', total_bab: 23, read_bab: 5 },
+          { id: 3, title: 'Sebelum Langit Patah', author: 'Laras A.', cover_image: 'cover_langit yang patah.jpe', total_bab: 19, read_bab: 19 },
+          { id: 4, title: 'Kamar 305', author: 'Raka Damar', cover_image: 'cover_kamar 305.jpg', total_bab: 16, read_bab: 8 },
+          { id: 5, title: 'pulang', author: 'Tara Adhitya', cover_image: 'cover_pulang.jpeg', total_bab: 20, read_bab: 0 }
+        ];
+      }
+      renderLibrary();
+    });
+
+    function renderLibrary() {
+      const container = document.getElementById('libraryListContainer');
+      const searchQuery = document.getElementById('libSearchInput').value.toLowerCase().trim();
+      const statusFilterVal = document.getElementById('statusFilter').value;
+
+      let filtered = libraryBooks.filter(book => {
+        // Tab Filter
+        if (activeTab === 'favorit' && !favoritesList.includes(book.id)) return false;
+        if (activeTab === 'riwayat' && !historyList.includes(book.id)) return false;
+
+        // Search Filter
+        if (searchQuery) {
+          const matchTitle = book.title.toLowerCase().includes(searchQuery);
+          const matchAuthor = book.author.toLowerCase().includes(searchQuery);
+          if (!matchTitle && !matchAuthor) return false;
+        }
+
+        // Status Filter
+        const isCompleted = completedList.includes(book.id) || (book.read_bab && book.read_bab >= (book.total_bab || 20));
+        if (statusFilterVal === 'selesai' && !isCompleted) return false;
+        if (statusFilterVal === 'sedang' && isCompleted) return false;
+
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 50px 20px; color: #94a3b8;">
+            <i class="fa-solid fa-book-open" style="font-size: 2.5rem; margin-bottom: 12px; color: #cbd5e1;"></i>
+            <h3 style="font-size: 1.1rem; color: #475569; margin-bottom: 6px;">Buku Tidak Ditemukan</h3>
+            <p style="font-size: 0.85rem; color: #94a3b8;">Belum ada koleksi buku untuk kategori ini.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(book => {
+        const coverSrc = (book.cover_image && book.cover_image.startsWith('http')) 
+          ? book.cover_image 
+          : (book.cover_image ? `gambar/${book.cover_image}` : 'gambar/cover_langit yang sama.jpg');
+
+        const totalBab = book.total_bab || 20;
+        const readBab = completedList.includes(book.id) ? totalBab : (book.read_bab || (book.id === 1 ? 12 : (book.id === 2 ? 5 : (book.id === 4 ? 8 : 0))));
+        const percent = Math.round((readBab / totalBab) * 100);
+        const isFav = favoritesList.includes(book.id);
+
+        return `
+          <div class="book-item">
+            <img src="${coverSrc}" alt="${book.title}" class="book-cover" onclick="window.location.href='detail.html?id=${book.id}'" onerror="this.src='gambar/cover_langit yang sama.jpg'">
+            <div class="book-info" onclick="window.location.href='detail.html?id=${book.id}'">
+              <h3 class="book-title">${book.title}</h3>
+              <p class="book-author">${book.author}</p>
+              <span class="progress-text">${readBab} / ${totalBab} bab (${percent}%)</span>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="action-btn" title="Opsi" onclick="toggleOptionMenu(event, ${book.id})"><i class="fa-solid fa-ellipsis"></i></button>
+              <button class="action-btn ${isFav ? 'active' : ''}" style="${isFav ? 'color: #e11d48;' : ''}" title="Favorit" onclick="toggleFav(event, ${book.id})">
+                <i class="fa-${isFav ? 'solid' : 'regular'} fa-bookmark"></i>
+              </button>
+              
+              <!-- DROPDOWN OPTION -->
+              <div class="options-dropdown" id="dropdown-${book.id}">
+                <button class="dropdown-btn" onclick="openBook(${book.id})"><i class="fa-solid fa-book-open"></i> Lanjut Membaca</button>
+                <button class="dropdown-btn" onclick="toggleFav(event, ${book.id})"><i class="fa-solid fa-star"></i> ${isFav ? 'Hapus dari Favorit' : 'Tambah ke Favorit'}</button>
+                <button class="dropdown-btn" onclick="toggleComplete(${book.id})"><i class="fa-solid fa-circle-check"></i> ${completedList.includes(book.id) ? 'Tandai Sedang Dibaca' : 'Tandai Selesai'}</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function toggleOptionMenu(e, bookId) {
+      e.stopPropagation();
+      document.querySelectorAll('.options-dropdown').forEach(d => {
+        if (d.id !== `dropdown-${bookId}`) d.classList.remove('active');
+      });
+      const dd = document.getElementById(`dropdown-${bookId}`);
+      if (dd) dd.classList.toggle('active');
+    }
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.options-dropdown').forEach(d => d.classList.remove('active'));
+    });
+
+    function openBook(bookId) {
+      window.location.href = `detail.html?id=${bookId}`;
+    }
+
+    function toggleFav(e, bookId) {
+      if (e) e.stopPropagation();
+      const idx = favoritesList.indexOf(bookId);
+      if (idx > -1) {
+        favoritesList.splice(idx, 1);
+      } else {
+        favoritesList.push(bookId);
+      }
+      localStorage.setItem('user_favorites', JSON.stringify(favoritesList));
+      renderLibrary();
+    }
+
+    function toggleComplete(bookId) {
+      const idx = completedList.indexOf(bookId);
+      if (idx > -1) {
+        completedList.splice(idx, 1);
+      } else {
+        completedList.push(bookId);
+      }
+      localStorage.setItem('user_completed', JSON.stringify(completedList));
+      renderLibrary();
+    }
+  </script>
+</body>
+</html>
