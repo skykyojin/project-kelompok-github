@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages. - Detail Buku</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style_detail.css">
+</head>
+<body>
+
+  <!-- NAVBAR UTAMA (SAMPING) -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="brand">
+        <i class="fa-solid fa-book-open"></i> pages.
+      </div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i> Beranda</a></li>
+        <li><a href="Library.html" class="nav-item"><i class="fa-solid fa-book-bookmark"></i> Rak Saya</a></li>
+        <li><a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i> Profil</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      "Setiap buku adalah perjalanan ke dunia lain. ♡"
+    </div>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-wrapper">
+    <header class="top-navbar">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="toggle-sidebar-btn" id="sidebarToggle" title="Buka/Tutup Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+      </div>
+    </header>
+
+    <main class="content-container">
+      <!-- HEADER DESKRIPSI BUKU -->
+      <div class="detail-header">
+        <img src="gambar/cover_langit yang sama.jpg" id="bookCover" alt="Cover Buku" class="detail-cover">
+        <div class="detail-meta">
+          <span class="genre-tag" id="bookGenre">Romance</span>
+          <h1 class="book-title" id="bookTitle">Langit yang Sama</h1>
+          <p class="book-author">Oleh <span id="bookAuthor">Arkana Putra</span></p>
+          
+          <div class="stats-row">
+            <div class="stat-item">
+              <strong id="chapterCount">0</strong>
+              <span>Bab Dibaca</span>
+            </div>
+            <div class="stat-item">
+              <strong>4.8</strong>
+              <span><i class="fa-solid fa-star" style="color: #f1c40f;"></i> Rating</span>
+            </div>
+            <div class="stat-item">
+              <strong>15.2k</strong>
+              <span>Pembaca</span>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <a href="#" id="firstChapterBtn" class="btn-primary"><i class="fa-solid fa-book-open"></i> Lanjut Membaca</a>
+            <button class="btn-secondary"><i class="fa-regular fa-bookmark"></i> Simpan</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SINOPSIS -->
+      <section class="detail-section">
+        <h2>Sinopsis</h2>
+        <p class="synopsis-text" id="bookSynopsis">
+          Memuat sinopsis...
+        </p>
+      </section>
+
+      <!-- DAFTAR BAB -->
+      <section class="detail-section">
+        <h2>Daftar Bab</h2>
+        <ul class="chapter-list" id="chapterList">
+          <li><i class="fa-solid fa-spinner fa-spin"></i> Memuat daftar bab...</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/script_beranda.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const bookId = urlParams.get('id') || 1;
+
+      // Ambil detail buku dari Supabase
+      const book = await fetchBookByIdFromSupabase(bookId);
+      if (book) {
+        document.getElementById('bookTitle').innerText = book.title;
+        document.title = `Pages. - ${book.title}`;
+        document.getElementById('bookAuthor').innerText = book.author;
+        document.getElementById('bookGenre').innerText = book.genre;
+        document.getElementById('bookSynopsis').innerText = book.synopsis || 'Sinopsis belum tersedia.';
+
+        const coverSrc = (book.cover_image && book.cover_image.startsWith('http')) 
+          ? book.cover_image 
+          : (book.cover_image ? `gambar/${book.cover_image}` : 'gambar/cover_langit yang sama.jpg');
+        document.getElementById('bookCover').src = coverSrc;
+      }
+
+      // Ambil daftar bab dari Supabase
+      const chapters = await fetchChaptersByBookId(bookId);
+      const chapterListEl = document.getElementById('chapterList');
+      document.getElementById('chapterCount').innerText = `${chapters.length} Bab`;
+
+      if (chapters && chapters.length > 0) {
+        document.getElementById('firstChapterBtn').href = `baca.html?chapter_id=${chapters[0].id}`;
+
+        chapterListEl.innerHTML = chapters.map((chap, idx) => `
+          <li>
+            <a href="baca.html?chapter_id=${chap.id}">
+              <span>${chap.title}</span> 
+              <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+          </li>
+        `).join('');
+      } else {
+        chapterListEl.innerHTML = '<li>Belum ada bab untuk buku ini. Tambahkan bab dari Admin Panel!</li>';
+        document.getElementById('firstChapterBtn').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

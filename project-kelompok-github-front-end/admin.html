@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages. - Admin Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style_Beranda.css">
+  <style>
+    /* OVERLAY LOGIN PASSWORD ONLY (Match Index.html Theme) */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-color);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      width: 100%;
+      max-width: 400px;
+      padding: 36px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .lock-icon-badge {
+      width: 60px;
+      height: 60px;
+      background: var(--sidebar-bg);
+      color: var(--primary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 20px auto;
+    }
+
+    .login-box h2 {
+      font-family: 'Merriweather', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+
+    .login-box p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .pass-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-dark);
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 3px;
+      outline: none;
+      transition: all 0.2s;
+      margin-bottom: 16px;
+    }
+
+    .pass-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(140, 107, 115, 0.15);
+    }
+
+    .btn-login-submit {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-login-submit:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+
+    /* KONTEN UTAMA ADMIN (Disesuaikan Persis UI Index) */
+    .admin-wrapper {
+      padding: 30px 40px;
+    }
+
+    .admin-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      margin-bottom: 30px;
+    }
+
+    .admin-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .admin-title-text {
+      font-family: 'Merriweather', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-create {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-create:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .admin-table th {
+      background-color: var(--sidebar-bg);
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .admin-table td {
+      padding: 14px;
+      font-size: 13px;
+      color: var(--text-dark);
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .admin-table tr:hover {
+      background-color: rgba(240, 235, 228, 0.4);
+    }
+
+    .book-thumb {
+      width: 44px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .act-btn {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .act-btn.chap {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+
+    .act-btn.chap:hover {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    .act-btn.edit {
+      background: var(--chip-bg);
+      color: var(--text-dark);
+    }
+
+    .act-btn.edit:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .act-btn.del {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .act-btn.del:hover {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
+    /* Modal Form UI */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 550px;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .modal-head {
+      padding: 18px 24px;
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-head h3 {
+      font-family: 'Merriweather', serif;
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .modal-body-content {
+      padding: 24px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .modal-foot {
+      padding: 16px 24px;
+      background: var(--sidebar-bg);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .form-group-item {
+      margin-bottom: 16px;
+    }
+
+    .form-group-item label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-dark);
+    }
+
+    .form-ctrl {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .form-ctrl:focus {
+      border-color: var(--primary);
+    }
+
+    .chapter-row {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- OVERLAY LOGIN PASSWORD ONLY (Match Screenshot Design) -->
+  <div class="login-overlay" id="adminLoginOverlay">
+    <div class="login-box">
+      <div class="lock-icon-badge">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2>ADMIN</h2>
+      <p>Masukkan password untuk lanjut</p>
+
+      <div id="loginError"
+        style="display: none; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; padding: 10px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 16px;">
+        Password salah! Silakan coba lagi.
+      </div>
+
+
+
+      <form onsubmit="handleAdminLogin(event)">
+        <input type="password" id="adminPassword" class="pass-input" placeholder="••••••••" required autofocus>
+        <button type="submit" class="btn-login-submit">
+          MASUK
+        </button>
+      </form>
+
+      <div style="margin-top: 20px;">
+        <a href="index.html" style="font-size: 0.85rem; color: #64748b; text-decoration: none;"><i
+            class="fa-solid fa-arrow-left"></i> Kembali ke Beranda</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR UTAMA (SAMPING) PERSIS INDEX.HTML -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="brand">
+        <i class="fa-solid fa-book-open"></i> pages.
+      </div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i> Beranda</a></li>
+        <li><a href="Library.html" class="nav-item"><i class="fa-solid fa-book-bookmark"></i> Rak Saya</a></li>
+        <li><a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i> Profil</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      "Setiap buku adalah perjalanan ke dunia lain. ♡"
+    </div>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-wrapper">
+    <!-- NAVBAR KHUSUS BERANDA (ATAS) -->
+    <header class="top-navbar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button class="toggle-sidebar-btn" id="sidebarToggle" title="Buka/Tutup Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <h2 style="font-family: 'Merriweather', serif; font-size: 18px; margin: 0;">Admin Panel</h2>
+      </div>
+
+      <div class="top-actions">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Cari judul, penulis, atau genre...">
+        </div>
+        <button onclick="handleAdminLogout()"
+          style="background: none; border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 500; color: #dc2626;">
+          <i class="fa-solid fa-right-from-bracket"></i> Keluar
+        </button>
+      </div>
+    </header>
+
+    <main class="admin-wrapper">
+      <div class="admin-card">
+        <div class="admin-header-flex">
+          <div class="admin-title-text">
+            Koleksi & Kelola Bab Buku
+          </div>
+          <button class="btn-create" onclick="openBookModal()">
+            <i class="fa-solid fa-plus"></i> Tambah Buku Baru
+          </button>
+        </div>
+
+        <!-- Tabel Data Buku -->
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Sampul</th>
+                <th>Judul Buku</th>
+                <th>Penulis</th>
+                <th>Genre</th>
+                <th>Kelola Bab</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="booksTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 8px;"></i><br>
+                  Memuat data buku dari Supabase...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL FORM BUKU -->
+  <div class="modal" id="bookModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="modalTitle">Tambah Buku Baru</h3>
+        <button class="close-btn" onclick="closeBookModal()">&times;</button>
+      </div>
+      <form id="bookForm" onsubmit="handleBookSubmit(event)">
+        <div class="modal-body-content">
+          <input type="hidden" id="bookId">
+
+          <div class="form-group-item">
+            <label for="bookTitle">Judul Buku *</label>
+            <input type="text" id="bookTitle" class="form-ctrl" placeholder="Contoh: Langit yang Sama" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group-item">
+              <label for="bookAuthor">Penulis *</label>
+              <input type="text" id="bookAuthor" class="form-ctrl" placeholder="Contoh: Arkana Putra" required>
+            </div>
+            <div class="form-group-item">
+              <label for="bookGenre">Genre *</label>
+              <input type="text" id="bookGenre" class="form-ctrl" placeholder="Contoh: Romance, Drama..." required>
+            </div>
+          </div>
+
+          <div class="form-group-item">
+            <label for="bookCover">File Sampul (di folder `gambar/`)</label>
+            <input type="text" id="bookCover" class="form-ctrl" placeholder="cover_langit yang sama.jpg"
+              value="cover_langit yang sama.jpg">
+          </div>
+
+          <div class="form-group-item">
+            <label for="bookSynopsis">Sinopsis Buku *</label>
+            <textarea id="bookSynopsis" class="form-ctrl" rows="3" placeholder="Tulis sinopsis ringkas buku..."
+              required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-foot">
+          <button type="button" class="act-btn edit" onclick="closeBookModal()">Batal</button>
+          <button type="submit" class="btn-create" id="btnSubmitBook">Simpan Buku</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL KELOLA BAB (CHAPTERS) -->
+  <div class="modal" id="chapterModal">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-head">
+        <h3 id="chapterModalTitle">Kelola Bab Buku</h3>
+        <button class="close-btn" onclick="closeChapterModal()">&times;</button>
+      </div>
+      <div class="modal-body-content">
+        <input type="hidden" id="currentBookId">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h4 style="margin: 0; font-size: 14px; font-weight: 600;">Daftar Bab Saat Ini</h4>
+          <button class="btn-create" style="padding: 6px 14px; font-size: 12px;" onclick="openChapterEditModal()">
+            <i class="fa-solid fa-plus"></i> Tambah Bab Baru
+          </button>
+        </div>
+
+        <div id="chapterListContainer">
+          <div style="text-align: center; padding: 20px; color: var(--text-muted);">Memuat bab...</div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="act-btn edit" onclick="closeChapterModal()">Selesai</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EDIT / TAMBAH BAB SPESIFIK -->
+  <div class="modal" id="chapterEditModal">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-head">
+        <h3 id="chapterEditTitle">Tambah Bab</h3>
+        <button class="close-btn" onclick="closeChapterEditModal()">&times;</button>
+      </div>
+      <form id="chapterForm" onsubmit="handleChapterSubmit(event)">
+        <div class="modal-body-content">
+          <input type="hidden" id="editChapterId">
+
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 12px;">
+            <div class="form-group-item">
+              <label for="chapNum">Nomor Bab *</label>
+              <input type="number" id="chapNum" class="form-ctrl" value="1" required>
+            </div>
+            <div class="form-group-item">
+              <label for="chapTitle">Judul Bab *</label>
+              <input type="text" id="chapTitle" class="form-ctrl" placeholder="Contoh: Bab 1: Pertemuan Pertama"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group-item">
+            <label for="chapContent">Isi Teks Cerita Bab *</label>
+            <textarea id="chapContent" class="form-ctrl" rows="7"
+              placeholder="Tulis atau tempel isi teks cerita bab di sini..." required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-foot">
+          <button type="button" class="act-btn edit" onclick="closeChapterEditModal()">Batal</button>
+          <button type="submit" class="btn-create" id="btnSubmitChapter">Simpan Bab</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/script_beranda.js"></script>
+  <script>
+    let allBooks = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAdminAuth();
+
+      document.getElementById('searchInput').addEventListener('input', filterBooks);
+      if (sessionStorage.getItem('admin_logged_in') === 'true') {
+        loadBooks();
+      }
+    });
+
+    /* ================= AUTENTIKASI PASSWORD ADMIN ONLY ================= */
+    function checkAdminAuth() {
+      const isLoggedIn = sessionStorage.getItem('admin_logged_in');
+      const overlay = document.getElementById('adminLoginOverlay');
+      if (isLoggedIn === 'true') {
+        overlay.style.display = 'none';
+      } else {
+        overlay.style.display = 'flex';
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const p = document.getElementById('adminPassword').value.trim();
+      const errEl = document.getElementById('loginError');
+
+      // Password Admin
+      if (p === 'danis2989') {
+        sessionStorage.setItem('admin_logged_in', 'true');
+        errEl.style.display = 'none';
+        checkAdminAuth();
+        loadBooks();
+      } else {
+        errEl.style.display = 'block';
+      }
+
+    }
+
+    function handleAdminLogout() {
+      if (confirm("Apakah Anda yakin ingin keluar dari Admin Panel?")) {
+        sessionStorage.removeItem('admin_logged_in');
+        checkAdminAuth();
+      }
+    }
+
+    /* ================= DATA BUKU SUPABASE ================= */
+    async function loadBooks() {
+      const tbody = document.getElementById('booksTableBody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 8px;"></i><br>
+            Memuat data dari Supabase...
+          </td>
+        </tr>`;
+
+      allBooks = await fetchBooksFromSupabase() || [];
+      renderTable(allBooks);
+    }
+
+    function renderTable(books) {
+      const tbody = document.getElementById('booksTableBody');
+      if (!books || books.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+              Belum ada data buku di Supabase. Klik <b>Tambah Buku Baru</b>.
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = books.map(book => {
+        const coverSrc = (book.cover_image && book.cover_image.startsWith('http'))
+          ? book.cover_image
+          : (book.cover_image ? `gambar/${book.cover_image}` : 'gambar/cover_langit yang sama.jpg');
+
+        return `
+          <tr>
+            <td><b>#${book.id}</b></td>
+            <td><img src="${coverSrc}" class="book-thumb" alt="${book.title}" onerror="this.src='gambar/cover_langit yang sama.jpg'"></td>
+            <td><strong style="color: var(--text-dark);">${book.title}</strong></td>
+            <td>${book.author}</td>
+            <td><span style="background: var(--chip-bg); padding: 4px 10px; border-radius: 8px; font-weight: 500;">${book.genre}</span></td>
+            <td>
+              <button class="act-btn chap" onclick="openChapterModal(${book.id}, '${book.title.replace(/'/g, "\\'")}')">
+                <i class="fa-solid fa-list"></i> Kelola Bab
+              </button>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="act-btn edit" onclick="editBook(${book.id})" title="Edit Buku"><i class="fa-solid fa-pen"></i></button>
+                <button class="act-btn del" onclick="confirmDeleteBook(${book.id})" title="Hapus Buku"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+    }
+
+    function filterBooks() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allBooks.filter(b =>
+        b.title.toLowerCase().includes(q) ||
+        b.author.toLowerCase().includes(q) ||
+        b.genre.toLowerCase().includes(q)
+      );
+      renderTable(filtered);
+    }
+
+    /* ================= MANAJEMEN BUKU ================= */
+    function openBookModal(book = null) {
+      document.getElementById('bookForm').reset();
+      document.getElementById('bookId').value = '';
+      document.getElementById('modalTitle').innerText = 'Tambah Buku Baru';
+
+      if (book) {
+        document.getElementById('bookId').value = book.id;
+        document.getElementById('bookTitle').value = book.title;
+        document.getElementById('bookAuthor').value = book.author;
+        document.getElementById('bookGenre').value = book.genre;
+        document.getElementById('bookCover').value = book.cover_image || '';
+        document.getElementById('bookSynopsis').value = book.synopsis || '';
+        document.getElementById('modalTitle').innerText = 'Edit Buku #' + book.id;
+      }
+
+      document.getElementById('bookModal').classList.add('active');
+    }
+
+    function closeBookModal() {
+      document.getElementById('bookModal').classList.remove('active');
+    }
+
+    async function handleBookSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('bookId').value;
+      const data = {
+        title: document.getElementById('bookTitle').value,
+        author: document.getElementById('bookAuthor').value,
+        genre: document.getElementById('bookGenre').value,
+        cover_image: document.getElementById('bookCover').value || 'cover_langit yang sama.jpg',
+        synopsis: document.getElementById('bookSynopsis').value
+      };
+
+      const btn = document.getElementById('btnSubmitBook');
+      btn.innerText = 'Menyimpan...';
+      btn.disabled = true;
+
+      try {
+        if (id) {
+          await updateBookInSupabase(id, data);
+          alert("Buku berhasil diperbarui!");
+        } else {
+          await addBookToSupabase(data);
+          alert("Buku baru berhasil ditambahkan!");
+        }
+        closeBookModal();
+        await loadBooks();
+      } catch (err) {
+        alert("Gagal menyimpan buku: " + err.message);
+      } finally {
+        btn.innerText = 'Simpan Buku';
+        btn.disabled = false;
+      }
+    }
+
+    function editBook(id) {
+      const book = allBooks.find(b => b.id == id);
+      if (book) openBookModal(book);
+    }
+
+    async function confirmDeleteBook(id) {
+      if (confirm(`Hapus buku #${id} beserta seluruh babnya?`)) {
+        try {
+          await deleteBookFromSupabase(id);
+          alert("Buku berhasil dihapus!");
+          await loadBooks();
+        } catch (err) {
+          alert("Gagal menghapus buku: " + err.message);
+        }
+      }
+    }
+
+    /* ================= MANAJEMEN BAB (CHAPTERS) ================= */
+    let currentBookChapters = [];
+
+    async function openChapterModal(bookId, bookTitle) {
+      document.getElementById('currentBookId').value = bookId;
+      document.getElementById('chapterModalTitle').innerText = `Kelola Bab: ${bookTitle}`;
+      document.getElementById('chapterModal').classList.add('active');
+      await loadChaptersList(bookId);
+    }
+
+    function closeChapterModal() {
+      document.getElementById('chapterModal').classList.remove('active');
+    }
+
+    async function loadChaptersList(bookId) {
+      const container = document.getElementById('chapterListContainer');
+      container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Memuat bab...</div>';
+
+      currentBookChapters = await fetchChaptersByBookId(bookId) || [];
+
+      if (currentBookChapters.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada bab untuk buku ini. Klik <b>Tambah Bab Baru</b>.</div>';
+        return;
+      }
+
+      container.innerHTML = currentBookChapters.map(chap => `
+        <div class="chapter-row">
+          <div>
+            <strong style="color: var(--text-dark); font-size: 13px;">${chap.title}</strong>
+            <div style="font-size: 12px; color: var(--text-muted); max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${chap.content}</div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="act-btn edit" onclick="openChapterEditModal(${chap.id})" title="Edit Bab"><i class="fa-solid fa-pen"></i> Edit</button>
+            <button class="act-btn del" onclick="confirmDeleteChapter(${chap.id})" title="Hapus Bab"><i class="fa-solid fa-trash"></i> Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openChapterEditModal(chapId = null) {
+      document.getElementById('chapterForm').reset();
+      document.getElementById('editChapterId').value = '';
+      document.getElementById('chapterEditTitle').innerText = 'Tambah Bab Baru';
+
+      const nextNum = currentBookChapters.length + 1;
+      document.getElementById('chapNum').value = nextNum;
+      document.getElementById('chapTitle').value = `Bab ${nextNum}: `;
+
+      if (chapId) {
+        const chap = currentBookChapters.find(c => c.id == chapId);
+        if (chap) {
+          document.getElementById('editChapterId').value = chap.id;
+          document.getElementById('chapNum').value = chap.chapter_number;
+          document.getElementById('chapTitle').value = chap.title;
+          document.getElementById('chapContent').value = chap.content;
+          document.getElementById('chapterEditTitle').innerText = 'Edit Bab';
+        }
+      }
+
+      document.getElementById('chapterEditModal').classList.add('active');
+    }
+
+    function closeChapterEditModal() {
+      document.getElementById('chapterEditModal').classList.remove('active');
+    }
+
+    async function handleChapterSubmit(e) {
+      e.preventDefault();
+      const bookId = document.getElementById('currentBookId').value;
+      const chapId = document.getElementById('editChapterId').value;
+      const data = {
+        book_id: parseInt(bookId),
+        chapter_number: parseInt(document.getElementById('chapNum').value),
+        title: document.getElementById('chapTitle').value,
+        content: document.getElementById('chapContent').value
+      };
+
+      const btn = document.getElementById('btnSubmitChapter');
+      btn.innerText = 'Menyimpan...';
+      btn.disabled = true;
+
+      try {
+        if (chapId) {
+          await updateChapterInSupabase(chapId, data);
+          alert("Bab berhasil diperbarui!");
+        } else {
+          await addChapterToSupabase(data);
+          alert("Bab baru berhasil ditambahkan!");
+        }
+        closeChapterEditModal();
+        await loadChaptersList(bookId);
+      } catch (err) {
+        alert("Gagal menyimpan bab: " + err.message);
+      } finally {
+        btn.innerText = 'Simpan Bab';
+        btn.disabled = false;
+      }
+    }
+
+    async function confirmDeleteChapter(chapId) {
+      if (confirm("Apakah Anda yakin ingin menghapus bab ini?")) {
+        try {
+          await deleteChapterFromSupabase(chapId);
+          alert("Bab berhasil dihapus!");
+          const bookId = document.getElementById('currentBookId').value;
+          await loadChaptersList(bookId);
+        } catch (err) {
+          alert("Gagal menghapus bab: " + err.message);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

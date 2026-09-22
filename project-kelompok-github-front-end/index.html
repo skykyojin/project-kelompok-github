@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages. - Beranda</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CSS/style_Beranda.css">
+</head>
+<body>
+
+
+  <!-- NAVBAR UTAMA (SAMPING) -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="brand">
+        <i class="fa-solid fa-book-open"></i> pages.
+      </div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-item active"><i class="fa-solid fa-house"></i> Beranda</a></li>
+        <li><a href="Library.html" class="nav-item"><i class="fa-solid fa-book-bookmark"></i> Rak Saya</a></li>
+        <li><a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i> Profil</a></li>
+      </ul>
+
+
+    </div>
+    <div class="sidebar-footer">
+      "Setiap buku adalah perjalanan ke dunia lain. ♡"
+    </div>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-wrapper">
+    <!-- NAVBAR KHUSUS BERANDA (ATAS) -->
+    <header class="top-navbar">
+      <div style="display: flex; align-items: center;">
+        <button class="toggle-sidebar-btn" id="sidebarToggle" title="Buka/Tutup Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <ul class="top-subnav">
+          <li><a href="#" class="subnav-link active">Terbaru</a></li>
+          <li><a href="#" class="subnav-link">Populer</a></li>
+        </ul>
+      </div>
+
+      <div class="top-actions">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Cari judul, penulis, atau genre...">
+        </div>
+        <a href="profile.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+          <span id="headerUserName" style="font-weight: 600; font-size: 14px; color: #333;">Aura</span>
+          <img src="gambar/images.jpe" alt="Avatar" class="user-avatar">
+        </a>
+      </div>
+    </header>
+
+
+    <main class="content-container">
+      <div class="hero-banner">
+        <h1>Buku bagus, selalu punya cara untuk menemani.</h1>
+        <p>Temukan cerita yang sesuai dengan suasana hatimu hari ini.</p>
+        <button class="btn-explore">Jelajahi Sekarang &rarr;</button>
+      </div>
+
+      <div class="section-title">
+        <h2>Untuk Kamu</h2>
+        <a href="#">Lihat Semua &rarr;</a>
+      </div>
+
+      <div class="books-grid" id="booksGrid">
+        <div class="book-card" data-genre="Romance" onclick="window.location.href='detail.html'">
+          <i class="fa-regular fa-heart like-btn"></i>
+          <img src="gambar/cover_langit yang sama.jpg" alt="Sampul Buku" class="book-cover">
+          <div class="book-title">Langit yang Sama</div>
+          <div class="book-author">Arkana Putra</div>
+          <span class="genre-tag">Romance</span>
+        </div>
+        <div class="book-card" data-genre="Drama" onclick="window.location.href='detail_di_antara_kita.html'">
+          <i class="fa-regular fa-heart like-btn"></i>
+          <img src="gambar/cover_di Antara kita.jpe" alt="Sampul Buku" class="book-cover">
+          <div class="book-title">Di Antara Kita</div>
+          <div class="book-author">Nara Satria</div>
+          <span class="genre-tag">Drama</span>
+        </div>
+        <div class="book-card" data-genre="Romance" onclick="window.location.href='detail_sebelum_langit_patah.html'">
+          <i class="fa-regular fa-heart like-btn"></i>
+          <img src="gambar/cover_langit yang patah.jpe" alt="Sampul Buku" class="book-cover">
+          <div class="book-title">Sebelum Langit Patah</div>
+          <div class="book-author">Laras A.</div>
+          <span class="genre-tag">Romance</span>
+        </div>
+        <div class="book-card" data-genre="Mystery" onclick="window.location.href='detail_kamar_305.html'">
+          <i class="fa-regular fa-heart like-btn"></i>
+          <img src="gambar/cover_kamar 305.jpg" alt="Sampul Buku" class="book-cover">
+          <div class="book-title">Kamar 305</div>
+          <div class="book-author">Raka Damar</div>
+          <span class="genre-tag">Mystery</span>
+        </div>
+        <div class="book-card" data-genre="Slice of Life" onclick="window.location.href='detail_pulang.html'">
+          <i class="fa-regular fa-heart like-btn"></i>
+          <img src="gambar/cover_pulang.jpeg" alt="Sampul Buku" class="book-cover">
+          <div class="book-title">pulang</div>
+          <div class="book-author">Tara Adhitya</div>
+          <span class="genre-tag">slice of life</span>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Genre Populer</h2>
+      </div>
+      <div class="genre-list">
+        <button class="genre-chip" data-filter="all">Semua</button>
+        <button class="genre-chip" data-filter="Romance">Romance</button>
+        <button class="genre-chip" data-filter="Drama">Drama</button>
+        <button class="genre-chip" data-filter="Fantasy">Fantasy</button>
+        <button class="genre-chip" data-filter="Mystery">Mystery</button>
+        <button class="genre-chip" data-filter="Slice of Life">Slice of Life</button>
+        <button class="genre-chip" data-filter="Action">Action</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/script_beranda.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Tampilkan nama user di sebelah foto profil
+      const savedName = localStorage.getItem('user_name') || 'Aura';
+      const nameEl = document.getElementById('headerUserName');
+      if (nameEl) nameEl.innerText = savedName;
+
+
+      // 3. Load Buku dari Supabase
+      if (typeof fetchBooksFromSupabase === 'function') {
+        const books = await fetchBooksFromSupabase();
+        if (books && books.length > 0) {
+          const booksGrid = document.getElementById('booksGrid');
+          if (booksGrid) {
+            const favList = JSON.parse(localStorage.getItem('user_favorites') || '[1, 2]');
+
+            const htmlStr = books.map(book => {
+              const coverSrc = (book.cover_image && book.cover_image.startsWith('http')) 
+                ? book.cover_image 
+                : (book.cover_image ? `gambar/${book.cover_image}` : 'gambar/cover_langit yang sama.jpg');
+              const link = `detail.html?id=${book.id}`;
+              const isFav = favList.includes(book.id);
+
+              return `
+                <div class="book-card" data-genre="${book.genre || 'Umum'}" onclick="window.location.href='${link}'" style="cursor: pointer;">
+                  <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart like-btn ${isFav ? 'active' : ''}" style="${isFav ? 'color: #e11d48;' : ''}" onclick="toggleFavHeart(event, ${book.id})"></i>
+                  <img src="${coverSrc}" alt="${book.title}" class="book-cover" onerror="this.src='gambar/cover_langit yang sama.jpg'">
+                  <div class="book-title">${book.title}</div>
+                  <div class="book-author">${book.author}</div>
+                  <span class="genre-tag">${book.genre || 'Umum'}</span>
+                </div>
+              `;
+            }).join('');
+            booksGrid.innerHTML = htmlStr;
+          }
+        }
+      }
+    });
+
+    // Fungsi Toggle Tombol Hati / Favorit
+    function toggleFavHeart(e, bookId) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation(); // Mencegah membuka detail buku saat hati diklik
+      }
+      const heartIcon = e.target;
+      let favList = JSON.parse(localStorage.getItem('user_favorites') || '[1, 2]');
+      const idx = favList.indexOf(bookId);
+
+      if (idx > -1) {
+        favList.splice(idx, 1);
+        heartIcon.classList.remove('fa-solid', 'active');
+        heartIcon.classList.add('fa-regular');
+        heartIcon.style.color = '';
+      } else {
+        favList.push(bookId);
+        heartIcon.classList.remove('fa-regular');
+        heartIcon.classList.add('fa-solid', 'active');
+        heartIcon.style.color = '#e11d48';
+      }
+
+      localStorage.setItem('user_favorites', JSON.stringify(favList));
+    }
+  </script>
+</body>
+</html>
+
+
