@@ -40,6 +40,7 @@ body {
 
 /* Class jika sidebar ditutup */
 .sidebar.collapsed {
+  transform: translateX(-100%);
   margin-left: -260px;
 }
 
